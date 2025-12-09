@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { downloadDocumentService, uploadDocumentService } from "../service/documentService";
+import { downloadDocumentService, getAllDocumentsService, uploadDocumentService } from "../service/documentService";
 
 export const uploadDocumentController = async (
   req: Request,
@@ -50,6 +50,25 @@ export const downloadDocumentController = async (
 
     return res.status(404).json({
       message: error.message || "Download failed",
+    });
+  }
+};
+export const getAllDocumentsController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const documents = await getAllDocumentsService();
+
+    return res.status(200).json({
+      message: "Documents fetched successfully ",
+      data:documents,
+    });
+  } catch (error: any) {
+    console.error("Fetch Documents Error:", error);
+
+    return res.status(500).json({
+      message: "Failed to fetch documents ",
     });
   }
 };

@@ -1,4 +1,4 @@
-import { saveDocumentToDB  ,getDocumentByIdFromDB } from "../persistance/documentRepo";
+import { saveDocumentToDB  ,getDocumentByIdFromDB, getAllDocumentsFromDB } from "../persistance/documentRepo";
 
 import fs from "fs";
 import path from "path";
@@ -36,5 +36,9 @@ export const downloadDocumentService = async (id: number) => {
     filePath,
     filename: document.filename,
   };
+};
+export const getAllDocumentsService = async () => {
+  const documents = await getAllDocumentsFromDB();
+  return documents;
 };
 
