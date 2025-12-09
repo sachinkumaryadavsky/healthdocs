@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import { downloadDocumentController, getAllDocumentsController, uploadDocumentController } from "../controller/documentController";
+import { deleteDocumentController, downloadDocumentController, getAllDocumentsController, uploadDocumentController } from "../controller/documentController";
 import { uploadMiddleware } from "../middleware/uploadMiddleware";
 const router = Router();
 
@@ -19,4 +19,6 @@ router.post(
 router.get("/documents/:id", downloadDocumentController);
 
 router.get("/documents", getAllDocumentsController);
+router.delete("/documents/:id", deleteDocumentController);
+
 export default router;

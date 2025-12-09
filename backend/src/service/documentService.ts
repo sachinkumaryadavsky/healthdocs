@@ -1,4 +1,4 @@
-import { saveDocumentToDB  ,getDocumentByIdFromDB, getAllDocumentsFromDB } from "../persistance/documentRepo";
+import { saveDocumentToDB  ,getDocumentByIdFromDB, getAllDocumentsFromDB, deleteDocumentById } from "../persistance/documentRepo";
 
 import fs from "fs";
 import path from "path";
@@ -42,3 +42,18 @@ export const getAllDocumentsService = async () => {
   return documents;
 };
 
+export const deleteDocumentService = async (id: number) => {
+  const doc = await getDocumentByIdFromDB(id);
+
+  if (!doc) {
+    return null;
+  }
+
+  
+  if (fs.existsSync(doc.filepath)) {
+    fs.unlinkSync(doc.filepath);
+  }
+  await deleteDocumentById(id);
+
+  return doc;
+};
