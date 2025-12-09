@@ -26,3 +26,8 @@ export const getAllDocumentsFromDB = async () => {
     },
   });
 };
+
+//  Delete by ID
+export const deleteDocumentById = async (id: number) => {
+  return await DocumentRepository.delete(id);
+};
