@@ -19,3 +19,15 @@ export const saveDocumentToDB = async (data: {
 export const getDocumentByIdFromDB = async (id: number) => {
   return await DocumentRepository.findOneBy({ id });
 };
+export const getAllDocumentsFromDB = async () => {
+  return await DocumentRepository.find({
+    order: {
+      created_at: "DESC", 
+    },
+  });
+};
+
+//  Delete by ID
+export const deleteDocumentById = async (id: number) => {
+  return await DocumentRepository.delete(id);
+};

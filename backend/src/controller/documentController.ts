@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { downloadDocumentService, uploadDocumentService } from "../service/documentService";
+import { deleteDocumentService, downloadDocumentService, getAllDocumentsService, uploadDocumentService } from "../service/documentService";
 
 export const uploadDocumentController = async (
   req: Request,
@@ -50,6 +50,53 @@ export const downloadDocumentController = async (
 
     return res.status(404).json({
       message: error.message || "Download failed",
+    });
+  }
+};
+export const getAllDocumentsController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const documents = await getAllDocumentsService();
+
+    return res.status(200).json({
+      message: "Documents fetched successfully ",
+      data:documents,
+    });
+  } catch (error: any) {
+    console.error("Fetch Documents Error:", error);
+
+    return res.status(500).json({
+      message: "Failed to fetch documents ",
+    });
+  }
+};
+export const deleteDocumentController = async (req: Request, res: Response) => {
+  try {
+    const id = Number(req.params.id);
+
+    if (!id) {
+      return res.status(400).json({ message: "Invalid document ID" });
+    }
+
+    const deletedDoc = await deleteDocumentService(id);
+    if (!deletedDoc) {
+      return res.status(404).json({
+        message: "Document not found",
+        data:null
+      });
+    }
+
+    return res.status(200).json({
+      message: "Document deleted successfully ",
+      data: deletedDoc,
+    });
+  } catch (error: any) {
+    console.error("Delete Controller Error:", error);
+
+    return res.status(500).json({
+      message: error.message || "Delete failed",
     });
   }
 };
