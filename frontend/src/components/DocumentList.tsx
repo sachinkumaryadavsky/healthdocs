@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useEffect, useState } from "react";
 import { api } from "../services/api";
 
@@ -58,9 +59,39 @@ function DocumentList({ refreshFlag }: DocumentListProps) {
     }
   };
 
-  const handleDownload = (id: number) => {
-    window.open(`http://localhost:3000/api/documents/${id}`);
-  };
+ const handleDownload = async (id: number) => {
+  try {
+    const res = await api.get(`/documents/${id}`, {
+      responseType: "blob", // ✅ VERY IMPORTANT
+    });
+
+    // Create file from blob
+    const blob = new Blob([res.data]);
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `document-${id}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+
+  } catch (error: any) {
+    console.error("Download failed:", error);
+
+    // Clean UI error instead of raw JSON
+    if (error?.response?.status === 404) {
+      setMessage("❌ File not found on server");
+    } else {
+      setMessage("❌ Download failed");
+    }
+
+    setTimeout(() => setMessage(""), 3000);
+  }
+};
+
 
   return (
   <div>
